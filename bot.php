@@ -22,15 +22,19 @@ if(!is_dir($utils)){
 	@mkdir($utils);
 }
 
-$files = @scandir($utils);
-foreach ($files as $file){
-	if(preg_match('/\.(php)/', $file)){
-		require_once $utils.$file;
+$files = [];
+foreach(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($main_dir)) as $file){
+	if(is_file($file)){
+		$s = @basename($file);
+		if(preg_match('/\.(php)/', $s)){
+			$files[] = $file;
+		}
 	}
 }
 
-require_once $main_dir."VkAPI.php";
-require_once $main_dir."Handler.php";
+foreach($files as $file){
+	require_once $file;
+}
 
 use VaKKuum\AshokaBot\Handler;
 use VaKKuum\AshokaBot\VkAPI;
@@ -41,7 +45,7 @@ $handler = new Handler();
 while(true){
 	if((time() - $last) >= 1){
 		$last = time();
-		$handler->check();
+		$handler->tick();
 	}
 }
 ?>

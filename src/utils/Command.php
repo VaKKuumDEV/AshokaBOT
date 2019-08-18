@@ -29,7 +29,7 @@ abstract class Command{
 					Logger::info("Ошибка выполнения команды \"".$this->name."\": ".$type.":".$local_id." - ".$from_id." - ".implode(" ", $args));
 				}
 			}else{
-				$handler->api->sendMessage($type, (int) $local_id, "Совет не допускает использование этой команды не форсюзерам.");
+				$handler->api->sendMessage($type, (int) $local_id, $handler->getConfig()["not_permission_message"]);
 			}
 		}
 		return false;
